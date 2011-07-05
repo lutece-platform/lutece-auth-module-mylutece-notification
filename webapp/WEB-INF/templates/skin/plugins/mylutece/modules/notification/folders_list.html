@@ -1,0 +1,31 @@
+<div class="span-5 prepend-1 append-1">
+	<div class="portlet-background append-bottom">
+		<div class="portlet-background-header -lutece-border-radius-top">
+			#i18n{module.mylutece.notification.folders_list.labelMyAccount}
+		</div>
+		<div class="portlet-background-content -lutece-border-radius-bottom">
+			<p>
+				${mylutece_user.getUserInfo('user.name.given')} ${mylutece_user.getUserInfo('user.name.family')}<br />
+			</p>
+			<p>
+				<#list folders_list as folder>
+					<img src="${folder.urlIcon}" alt="${folder.label}" title="${folder.label}" />
+					<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;id_folder=${folder.idFolder}">
+						<#if folder.idFolder = id_folder>
+							<b>${folder.label}</b>
+						<#else>
+							${folder.label}
+						</#if>
+						<#assign nb_unread_notifications = folder.getUnreadNotifications( mylutece_user.name )>
+						<#if ( nb_unread_notifications?? && nb_unread_notifications > 0 )>
+							(${nb_unread_notifications})
+						</#if>
+					</a>
+					<#if folder_has_next>
+						<br />
+					</#if>
+				</#list>
+			</p>
+		</div>
+	</div>
+</div>

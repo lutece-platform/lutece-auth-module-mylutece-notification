@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- DAO -->
+	<bean id="mylutece-notification.notificationDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.NotificationDAO" />
+	<bean id="mylutece-notification.folderDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderDAO" />
+
+	<!-- Services -->
+	<bean id="mylutece-notification.notificationService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationService" />
+	<bean id="mylutece-notification.folderService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.folder.FolderService" />
+</beans>

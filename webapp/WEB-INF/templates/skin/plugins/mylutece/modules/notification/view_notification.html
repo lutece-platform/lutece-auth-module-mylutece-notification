@@ -1,0 +1,37 @@
+<div class="portlet-background append-bottom">
+	<div class="portlet-background-header -lutece-border-radius-top">
+		${notification.object}
+	</div>
+	<div class="portlet-background-content -lutece-border-radius-bottom">
+		<form method="post" action="jsp/site/Portal.jsp">
+			<p>
+				<input type="hidden" name="page" value="mylutece-notification" />
+				<input type="hidden" name="action" value="do_process" />
+				<input type="hidden" name="id_folder" value="${id_folder}" />
+				<input type="hidden" name="id_notifications" value="${notification.idNotification}" />
+				<#if id_folder != 2>
+					<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_archive" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
+				<#else>
+					<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
+					<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_restore" value="#i18n{module.mylutece.notification.manage_notifications.buttonRestore}" />
+				</#if>
+			</p>
+			<p>
+				<b>
+					<#if id_folder = 3>
+						#i18n{module.mylutece.notification.view_notification.labelReceiver} :&nbsp;
+					<#else>
+						#i18n{module.mylutece.notification.view_notification.labelSender} :&nbsp;
+					</#if>
+				</b>
+				${notification.userGuidSender}
+			</p>
+			<p>
+				<b>#i18n{module.mylutece.notification.view_notification.labelDateSent} : </b>${notification.dateCreation?date}
+			</p>
+			<p>
+				${notification.message}
+			</p>
+		</form>
+	</div>
+</div>
