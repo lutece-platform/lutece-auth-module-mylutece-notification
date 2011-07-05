@@ -88,12 +88,8 @@ public class FolderPersonnal extends AbstractFolder
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setUrlIcon( String strUrlIcon )
+    public String getImgFolder(  )
     {
-        if ( StringUtils.isBlank( strUrlIcon ) )
-        {
-            super.setUrlIcon( IMG_FOLDER );
-        }
+        return IMG_FOLDER;
     }
 }
