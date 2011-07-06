@@ -5,6 +5,9 @@
 <xsl:variable name="portlet-id" select="portlet/portlet-id" />
 <xsl:variable name="page-id" select="portlet/page-id" />
 <xsl:variable name="id-current-folder" select="portlet/mylutece-notification-list-portlet/id-folder" />
+<xsl:variable name="page-index" select="portlet/mylutece-notification-list-portlet/page-index" />
+<xsl:variable name="nb-items-per-page" select="portlet/mylutece-notification-list-portlet/nb-items-per-page" />
+<xsl:variable name="is-last-page-index" select="portlet/mylutece-notification-list-portlet/is-last-page-index" />
 <xsl:variable name="label-from" select="portlet/mylutece-notification-list-portlet/label-from" />
 <xsl:variable name="label-to" select="portlet/mylutece-notification-list-portlet/label-to" />
 <xsl:variable name="label-object" select="portlet/mylutece-notification-list-portlet/label-object" />
@@ -90,6 +93,7 @@
 			</tr>
 			<xsl:apply-templates select="notification" />
 		</table>
+		<xsl:call-template name="paginator" />
 	</xsl:if>
 </xsl:template>
 
@@ -120,6 +124,29 @@
 			</td>
 		</xsl:if>
 	</tr>
+</xsl:template>
+
+<xsl:template name="paginator">
+	<xsl:if test="( $page-index != 1 ) or ($is-last-page-index != 1 )">
+		<p>
+			<xsl:if test="$page-index != 1">
+				<xsl:variable name="page-index-prev">
+					<xsl:value-of select="$page-index - 1" />
+				</xsl:variable>
+				<a href="jsp/site/Portal.jsp?page_id={$page-id}&amp;id_folder={$id-current-folder}&amp;page_index={$page-index-prev}">
+					<img tile="&lt;" alt="&lt;" src="images/admin/skin/prev.png" />
+				</a>
+			</xsl:if>
+			<xsl:if test="$is-last-page-index != 1">
+				<xsl:variable name="page-index-next">
+					<xsl:value-of select="$page-index + 1" />
+				</xsl:variable>
+				<a href="jsp/site/Portal.jsp?page_id={$page-id}&amp;id_folder={$id-current-folder}&amp;page_index={$page-index-next}">
+					<img tile="&gt;" alt="&gt;" src="images/admin/skin/next.png" />
+				</a>
+			</xsl:if>
+		</p>
+	</xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

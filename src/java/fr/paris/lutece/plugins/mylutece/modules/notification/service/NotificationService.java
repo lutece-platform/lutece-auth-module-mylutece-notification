@@ -175,6 +175,21 @@ public final class NotificationService
     }
 
     /**
+     * Get the number of notifications of a demand
+     * @param nIdFolder the id folder
+     * @param strUserGuidReceiver the user guid receiver
+     * @return the number of notifications
+     */
+    public int getNumberNotifications( int nIdFolder, String strUserGuidReceiver )
+    {
+        NotificationFilter nFilter = new NotificationFilter(  );
+        nFilter.setIdFolder( nIdFolder );
+        nFilter.setUserGuidReceiver( strUserGuidReceiver );
+
+        return NotificationHome.countNotificationsByFilter( nFilter );
+    }
+
+    /**
      * Get the number of unread notifications of a demand
      * @param nIdFolder the id folder
      * @param strUserGuidReceiver the user guid receiver

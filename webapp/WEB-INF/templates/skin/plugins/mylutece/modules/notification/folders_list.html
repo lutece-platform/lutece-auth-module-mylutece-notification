@@ -16,7 +16,7 @@
 						<#else>
 							${folder.label}
 						</#if>
-						<#assign nb_unread_notifications = folder.getUnreadNotifications( mylutece_user.name )>
+						<#assign nb_unread_notifications = folder.getNumberUnreadNotifications( mylutece_user.name )>
 						<#if ( nb_unread_notifications?? && nb_unread_notifications > 0 )>
 							(${nb_unread_notifications})
 						</#if>

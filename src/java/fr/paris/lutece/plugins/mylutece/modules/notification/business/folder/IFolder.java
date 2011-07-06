@@ -110,9 +110,16 @@ public interface IFolder
     FolderType getFolderType(  );
 
     /**
+     * Get the number of notification given an user guid
+     * @param strUserGuid the user guid
+     * @return the number of notifications
+     */
+    int getNumberNotifications( String strUserGuid );
+
+    /**
      * Get the number of unread notification given an user guid
      * @param strUserGuid the user guid
      * @return the number of unread notifications
      */
-    int getUnreadNotifications( String strUserGuid );
+    int getNumberUnreadNotifications( String strUserGuid );
 }

@@ -137,7 +137,15 @@ public abstract class AbstractFolder implements IFolder
     /**
      * {@inheritDoc}
      */
-    public int getUnreadNotifications( String strUserGuid )
+    public int getNumberNotifications( String strUserGuid )
+    {
+        return NotificationService.getService(  ).getNumberNotifications( _nIdFolder, strUserGuid );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getNumberUnreadNotifications( String strUserGuid )
     {
         return NotificationService.getService(  ).getNumberUnreadNotifications( _nIdFolder, strUserGuid );
     }

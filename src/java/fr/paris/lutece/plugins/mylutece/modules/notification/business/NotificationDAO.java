@@ -47,6 +47,9 @@ import java.util.List;
  */
 public class NotificationDAO implements INotificationDAO
 {
+    // CONSTANTS
+    private static final String COMMA = ",";
+
     // SQL QUERIES
     private static final String SQL_QUERY_NEW_PK = " SELECT max( id_notification ) FROM mylutece_notification ";
     private static final String SQL_QUERY_INSERT = " INSERT INTO mylutece_notification (id_notification, id_folder, is_read, user_guid_sender, user_guid_receiver, object, message, date_creation) VALUES (?,?,?,?,?,?,?,?) ";
@@ -62,6 +65,7 @@ public class NotificationDAO implements INotificationDAO
     private static final String SQL_OR = " OR ";
     private static final String SQL_AND = " AND ";
     private static final String SQL_WHERE = " WHERE ";
+    private static final String SQL_LIMIT = " LIMIT ";
     private static final String SQL_DATE_CREATION = " date_creation ";
     private static final String SQL_FILTER_ID_FOLDER = " id_folder = ? ";
     private static final String SQL_FILTER_IS_READ = " is_read = ? ";
@@ -227,6 +231,14 @@ public class NotificationDAO implements INotificationDAO
         sbSQL.append( SQL_ORDER_BY );
         sbSQL.append( SQL_DATE_CREATION );
         sbSQL.append( SQL_DESC );
+
+        if ( nFilter.containsLimit(  ) )
+        {
+            int nLimitSecondRange = nFilter.getLimitIndex(  ) * nFilter.getLimitRange(  );
+            int nLimitFirstRange = nLimitSecondRange - nFilter.getLimitRange(  ) + 1;
+            sbSQL.append( SQL_LIMIT );
+            sbSQL.append( nLimitFirstRange + COMMA + nLimitSecondRange );
+        }
 
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
         setFilterValues( nFilter, daoUtil );

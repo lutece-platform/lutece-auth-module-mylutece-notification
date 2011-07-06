@@ -44,7 +44,9 @@ import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.date.DateUtil;
+import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import org.apache.commons.lang.StringUtils;
@@ -72,6 +74,7 @@ public class NotificationListPortlet extends Portlet
     private static final String PROPERTY_LABEL_OBJECT = "module.mylutece.notification.manage_notifications.labelObject";
     private static final String PROPERTY_LABEL_DATE_RECEIVED = "module.mylutece.notification.manage_notifications.labelDateReceived";
     private static final String PROPERTY_LABEL_SELECT_FOLDER = "module.mylutece.notification.manage_notifications.labelSelectFolder";
+    private static final String PROPERTY_NOTIFICATION_ITEMS_PER_PAGE = "mylutece-notification.itemsPerPage";
 
     // PARAMETERS
     private static final String PARAMETER_ID_FOLDER = "id_folder";
@@ -85,6 +88,9 @@ public class NotificationListPortlet extends Portlet
     private static final String TAG_FOLDERS_LIST = "folders-list";
     private static final String TAG_FOLDER = "folder";
     private static final String TAG_ID_FOLDER = "id-folder";
+    private static final String TAG_PAGE_INDEX = "page-index";
+    private static final String TAG_IS_LAS_PAGE_INDEX = "is-last-page-index";
+    private static final String TAG_NB_ITEMS_PER_PAGE = "nb-items-per-page";
     private static final String TAG_FOLDER_LABEL = "folder-label";
     private static final String TAG_NOTIFICATIONS_LIST = "notifications-list";
     private static final String TAG_NOTIFICATION = "notification";
@@ -175,7 +181,29 @@ public class NotificationListPortlet extends Portlet
                         nIdFolder = Integer.parseInt( strIdFolder );
                     }
 
+                    int nPageIndex = 1;
+                    String strPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, "1" );
+
+                    if ( StringUtils.isNotBlank( strPageIndex ) && StringUtils.isNumeric( strPageIndex ) )
+                    {
+                        nPageIndex = Integer.parseInt( strPageIndex );
+                    }
+
+                    int nItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_NOTIFICATION_ITEMS_PER_PAGE, 10 );
+                    boolean bIsLastPageIndex = true;
+
+                    if ( ( nItemsPerPage * nPageIndex ) <= NotificationService.getService(  )
+                                                                                  .getNumberNotifications( nIdFolder,
+                                user.getName(  ) ) )
+                    {
+                        bIsLastPageIndex = false;
+                    }
+
                     XmlUtil.addElement( sbXml, TAG_ERROR_MESSAGE, StringUtils.EMPTY );
+                    XmlUtil.addElement( sbXml, TAG_ID_FOLDER, nIdFolder );
+                    XmlUtil.addElement( sbXml, TAG_PAGE_INDEX, nPageIndex );
+                    XmlUtil.addElement( sbXml, TAG_NB_ITEMS_PER_PAGE, nItemsPerPage );
+                    XmlUtil.addElement( sbXml, TAG_IS_LAS_PAGE_INDEX, bIsLastPageIndex ? TRUE : FALSE );
                     XmlUtil.addElement( sbXml, TAG_ID_FOLDER, nIdFolder );
                     XmlUtil.addElement( sbXml, TAG_LABEL_FROM,
                         I18nService.getLocalizedString( PROPERTY_LABEL_FROM, request.getLocale(  ) ) );
@@ -189,7 +217,7 @@ public class NotificationListPortlet extends Portlet
                         I18nService.getLocalizedString( PROPERTY_LABEL_SELECT_FOLDER, request.getLocale(  ) ) );
 
                     getFoldersListXml( sbXml, user, request.getLocale(  ) );
-                    getNotificationsListXml( sbXml, request.getLocale(  ), nIdFolder );
+                    getNotificationsListXml( sbXml, request, nIdFolder, nPageIndex );
                 }
                 else
                 {
@@ -238,15 +266,18 @@ public class NotificationListPortlet extends Portlet
     /**
      * Get the list of notifications in XML
      * @param sbXml the XML
-     * @param locale {@link Locale}
+     * @param request {@link HttpServletRequest}
      * @param nIdFolder the id folder
+     * @param nPageIndex the page index
      */
-    private void getNotificationsListXml( StringBuffer sbXml, Locale locale, int nIdFolder )
+    private void getNotificationsListXml( StringBuffer sbXml, HttpServletRequest request, int nIdFolder, int nPageIndex )
     {
         XmlUtil.beginElement( sbXml, TAG_NOTIFICATIONS_LIST );
 
         NotificationFilter nFilter = new NotificationFilter(  );
         nFilter.setIdFolder( nIdFolder );
+        nFilter.setLimitIndex( nPageIndex );
+        nFilter.setLimitRange( AppPropertiesService.getPropertyInt( PROPERTY_NOTIFICATION_ITEMS_PER_PAGE, 10 ) );
 
         for ( Notification notification : NotificationService.getService(  ).findByFilter( nFilter ) )
         {
@@ -257,7 +288,7 @@ public class NotificationListPortlet extends Portlet
             if ( _bShowDateCreation )
             {
                 XmlUtil.addElement( sbXml, TAG_NOTIFICATION_DATE_CREATION,
-                    DateUtil.getDateString( notification.getDateCreation(  ), locale ) );
+                    DateUtil.getDateString( notification.getDateCreation(  ), request.getLocale(  ) ) );
             }
 
             if ( _bShowSender )

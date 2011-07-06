@@ -51,6 +51,8 @@ public class NotificationFilter
     private String _strUserGuidSender;
     private String _strUserGuidReceiver;
     private int _nIsRead;
+    private int _nLimitRange;
+    private int _nLimitIndex;
 
     /**
      * Constructor
@@ -62,6 +64,8 @@ public class NotificationFilter
         _strUserGuidSender = StringUtils.EMPTY;
         _strUserGuidReceiver = StringUtils.EMPTY;
         _nIsRead = ALL_INT;
+        _nLimitRange = ALL_INT;
+        _nLimitIndex = ALL_INT;
     }
 
     /**
@@ -200,5 +204,50 @@ public class NotificationFilter
     public boolean containsIsRead(  )
     {
         return _nIsRead != ALL_INT;
+    }
+
+    /**
+     * Set the limit index
+     * @param nLimitIndex the limit index
+     */
+    public void setLimitIndex( int nLimitIndex )
+    {
+        _nLimitIndex = nLimitIndex;
+    }
+
+    /**
+     * Get the limit index
+     * @return the limit index
+     */
+    public int getLimitIndex(  )
+    {
+        return _nLimitIndex;
+    }
+
+    /**
+     * Set the limit range
+     * @param nLimitRange the limit range
+     */
+    public void setLimitRange( int nLimitRange )
+    {
+        _nLimitRange = nLimitRange;
+    }
+
+    /**
+     * Get the limit range
+     * @return the limit range
+     */
+    public int getLimitRange(  )
+    {
+        return _nLimitRange;
+    }
+
+    /**
+     * Check whether the filter contains the limit
+     * @return true if it contains, false otherwise
+     */
+    public boolean containsLimit(  )
+    {
+        return ( _nLimitRange != ALL_INT ) && ( _nLimitIndex != ALL_INT );
     }
 }
