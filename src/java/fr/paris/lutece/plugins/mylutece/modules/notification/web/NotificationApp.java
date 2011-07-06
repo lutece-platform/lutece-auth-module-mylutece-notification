@@ -54,12 +54,14 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -80,6 +82,7 @@ public class NotificationApp implements XPageApplication
     private static final String PROPERTY_MANAGE_NOTIFICATIONS_PAGE_PATH = "module.mylutece.notification.manage_notifications.pagePathLabel";
     private static final String PROPERTY_MANAGE_NOTIFICATIONS_PAGE_TITLE = "module.mylutece.notification.manage_notifications.pageTitle";
     private static final String PROPERTY_LABEL_NO_OBJECT = "mylutece-notification.labelNoObject";
+    private static final String PROPERTY_NOTIFICATION_ITEMS_PER_PAGE = "mylutece-notification.itemsPerPage";
 
     // PARAMETERS
     private static final String PARAMETER_ACTION = "action";
@@ -104,6 +107,7 @@ public class NotificationApp implements XPageApplication
     private static final String MARK_FOLDERS_LIST = "folders_list";
     private static final String MARK_ID_FOLDER = "id_folder";
     private static final String MARK_NOTIFICATION_PAGE_CONTENT = "notification_page_content";
+    private static final String MARK_PAGINATOR = "paginator";
 
     // ACTIONS
     private static final String ACTION_VIEW_NOTIFICATION = "view_notification";
@@ -189,7 +193,7 @@ public class NotificationApp implements XPageApplication
 
         if ( StringUtils.isBlank( strMainHtml ) )
         {
-            strMainHtml = getHtmlManageNotifications( nIdFolder, user, request.getLocale(  ) );
+            strMainHtml = getHtmlManageNotifications( request, nIdFolder, user );
         }
 
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -229,20 +233,33 @@ public class NotificationApp implements XPageApplication
 
     /**
      * Get the html code for managing the notifications
+     * @param request {@link HttpServletRequest}
      * @param nIdFolder the current id folder
      * @param user the {@link LuteceUser}
-     * @param locale the {@link Locale}
      * @return the html code
      */
-    private String getHtmlManageNotifications( int nIdFolder, LuteceUser user, Locale locale )
+    private String getHtmlManageNotifications( HttpServletRequest request, int nIdFolder, LuteceUser user )
     {
+        int nItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_NOTIFICATION_ITEMS_PER_PAGE, 10 );
+        UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
+        url.addParameter( PARAMETER_PAGE, NotificationPlugin.PLUGIN_NAME );
+        url.addParameter( PARAMETER_ID_FOLDER, nIdFolder );
+
+        String strPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, "1" );
+
+        List<Notification> listNotifications = _notificationService.findNotificationsByUserGuid( user.getName(  ),
+                nIdFolder );
+        Paginator<Notification> paginator = new Paginator<Notification>( listNotifications, nItemsPerPage,
+                url.getUrl(  ), Paginator.PARAMETER_PAGE_INDEX, strPageIndex );
+
         Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_NOTIFICATIONS_LIST,
-            _notificationService.findNotificationsByUserGuid( user.getName(  ), nIdFolder ) );
+        model.put( MARK_NOTIFICATIONS_LIST, paginator.getPageItems(  ) );
         model.put( MARK_MYLUTECE_USER, user );
         model.put( MARK_ID_FOLDER, nIdFolder );
+        model.put( MARK_PAGINATOR, paginator );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_NOTIFICATIONS, locale, model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_NOTIFICATIONS, request.getLocale(  ),
+                model );
         template.getHtml(  );
 
         return template.getHtml(  );

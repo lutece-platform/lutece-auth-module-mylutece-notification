@@ -1,5 +1,5 @@
 <div class="portlet-background-header -lutece-border-radius-top">
-	#i18n{module.mylutece.notification.notifications_page_frameset.labelManageNotifications}
+	#i18n{module.mylutece.notification.manage_notifications.labelManageNotifications}
 </div>
 <div class="portlet-background-content -lutece-border-radius-bottom">
 	<form method="post" action="jsp/site/Portal.jsp">
@@ -16,6 +16,11 @@
 				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
 				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_restore" value="#i18n{module.mylutece.notification.manage_notifications.buttonRestore}" />
 			</#if>
+		</p>
+		<p>
+			#i18n{module.mylutece.notification.manage_notifications.labelItemsCount} : <strong>${paginator.itemsCount}</strong> <br />
+			#i18n{module.mylutece.notification.manage_notifications.labelItemsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
+			<@pagination paginator=paginator />
 		</p>
 		<table>
 			<tr>
@@ -61,5 +66,8 @@
 				</tr>
 			</#list>
 		</table>
+		<p>
+			<@pagination paginator=paginator />
+		</p>
 	</form>
 </div>
