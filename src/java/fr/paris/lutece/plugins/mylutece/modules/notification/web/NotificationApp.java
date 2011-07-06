@@ -49,6 +49,7 @@ import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
@@ -93,6 +94,7 @@ public class NotificationApp implements XPageApplication
     private static final String PARAMETER_OBJECT = "object";
     private static final String PARAMETER_MESSAGE = "message";
     private static final String PARAMETER_ID_FOLDER = "id_folder";
+    private static final String PARAMETER_DO_DELETE = "do_delete";
 
     // MARKS
     private static final String MARK_NOTIFICATIONS_LIST = "notifications_list";
@@ -105,7 +107,6 @@ public class NotificationApp implements XPageApplication
 
     // ACTIONS
     private static final String ACTION_VIEW_NOTIFICATION = "view_notification";
-    private static final String ACTION_DO_DELETE_NOTIFICATIONS = "do_delete_notifications";
     private static final String ACTION_DO_PROCESS = "do_process";
     private static final String ACTION_CREATE_NOTIFICATION = "create_notification";
 
@@ -115,9 +116,6 @@ public class NotificationApp implements XPageApplication
     private static final String TEMPLATE_CREATE_NOTIFICATION = "skin/plugins/mylutece/modules/notification/create_notification.html";
     private static final String TEMPLATE_FOLDERS_LIST = "skin/plugins/mylutece/modules/notification/folders_list.html";
     private static final String TEMPLATE_NOTIFICATION_PAGE_FRAMESET = "skin/plugins/mylutece/modules/notification/notification_page_frameset.html";
-
-    // JSP
-    private static final String JSP_PORTAL = "jsp/site/Portal.jsp";
 
     // MESSAGES
     private static final String MESSAGE_CONFIRM_REMOVE_NOTIFICATIONS = "module.mylutece.notification.message.confirmRemoveNotifications";
@@ -154,26 +152,27 @@ public class NotificationApp implements XPageApplication
             {
                 strMainHtml = getHtmlViewNotification( request, nIdFolder, user );
             }
-            else if ( ACTION_DO_DELETE_NOTIFICATIONS.equals( strAction ) )
-            {
-                doDeleteNotifications( request, user );
-            }
             else if ( ACTION_CREATE_NOTIFICATION.equals( strAction ) )
             {
-                strMainHtml = getHtmlCreateNotification( nIdFolder, user, request.getLocale(  ) );
+                strMainHtml = getHtmlCreateNotification( request, nIdFolder, user );
             }
             else if ( ACTION_DO_PROCESS.equals( strAction ) )
             {
-                String strArchive = request.getParameter( PARAMETER_DO_ARCHIVE );
-                String strRestore = request.getParameter( PARAMETER_DO_RESTORE );
+                String strDoArchive = request.getParameter( PARAMETER_DO_ARCHIVE );
+                String strDoRestore = request.getParameter( PARAMETER_DO_RESTORE );
+                String strDoCreate = request.getParameter( PARAMETER_DO_CREATE );
                 String strDelete = request.getParameter( PARAMETER_DELETE );
-                String strCreate = request.getParameter( PARAMETER_DO_CREATE );
+                String strDoDelete = request.getParameter( PARAMETER_DO_DELETE );
 
-                if ( StringUtils.isNotBlank( strArchive ) )
+                if ( StringUtils.isNotBlank( strDoCreate ) )
+                {
+                    doCreateNotification( request, user );
+                }
+                else if ( StringUtils.isNotBlank( strDoArchive ) )
                 {
                     doArchiveNotifications( request, user );
                 }
-                else if ( StringUtils.isNotBlank( strRestore ) )
+                else if ( StringUtils.isNotBlank( strDoRestore ) )
                 {
                     doRestoreNotifications( request, user );
                 }
@@ -181,9 +180,9 @@ public class NotificationApp implements XPageApplication
                 {
                     getDeleteNotifications( request, nIdFolder );
                 }
-                else if ( StringUtils.isNotBlank( strCreate ) )
+                else if ( StringUtils.isNotBlank( strDoDelete ) )
                 {
-                    doCreateNotification( request, user );
+                    doDeleteNotifications( request, user );
                 }
             }
         }
@@ -292,19 +291,20 @@ public class NotificationApp implements XPageApplication
 
     /**
      * Get the html code for creating a notification
+     * @param request {@link HttpServletRequest}
      * @param nIdFolder the current id folder
      * @param user the {@link LuteceUser}
-     * @param locale the {@link Locale}
      * @return the html code
      */
-    private String getHtmlCreateNotification( int nIdFolder, LuteceUser user, Locale locale )
+    private String getHtmlCreateNotification( HttpServletRequest request, int nIdFolder, LuteceUser user )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_MYLUTECE_USERS_LIST, _notificationService.getUsers(  ) );
         model.put( MARK_MYLUTECE_USER, user );
         model.put( MARK_ID_FOLDER, nIdFolder );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_NOTIFICATION, locale, model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_NOTIFICATION, request.getLocale(  ),
+                model );
 
         return template.getHtml(  );
     }
@@ -360,11 +360,10 @@ public class NotificationApp implements XPageApplication
                 sbIdNotifications.append( strIdNotification + COMMA );
             }
 
-            // Not safe because the webmaster can change the portal url set in the property file
-            // UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
-            UrlItem url = new UrlItem( JSP_PORTAL );
+            UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
             url.addParameter( PARAMETER_PAGE, NotificationPlugin.PLUGIN_NAME );
-            url.addParameter( PARAMETER_ACTION, ACTION_DO_DELETE_NOTIFICATIONS );
+            url.addParameter( PARAMETER_ACTION, ACTION_DO_PROCESS );
+            url.addParameter( PARAMETER_DO_DELETE, PARAMETER_DO_DELETE );
             url.addParameter( PARAMETER_ID_NOTIFICATIONS, sbIdNotifications.toString(  ) );
             url.addParameter( PARAMETER_ID_FOLDER, nIdFolder );
             SiteMessageService.setMessage( request, MESSAGE_CONFIRM_REMOVE_NOTIFICATIONS,

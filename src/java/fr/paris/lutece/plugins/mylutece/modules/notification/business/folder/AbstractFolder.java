@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.mylutece.modules.notification.business.folder;
 
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationService;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -49,13 +49,13 @@ public abstract class AbstractFolder implements IFolder
     private String _strUrlIcon;
     private FolderType _folderType;
     private String _strUserGuid;
-    
+
     /**
      * Get the image folder
      * @return the image folder
      */
     public abstract String getImgFolder(  );
-    
+
     /**
      * {@inheritDoc}
      */
@@ -83,7 +83,7 @@ public abstract class AbstractFolder implements IFolder
         }
         else
         {
-        	_strUrlIcon = strUrlIcon;
+            _strUrlIcon = strUrlIcon;
         }
     }
 

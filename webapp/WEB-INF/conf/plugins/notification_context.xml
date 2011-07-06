@@ -5,6 +5,7 @@
 	<!-- DAO -->
 	<bean id="mylutece-notification.notificationDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.NotificationDAO" />
 	<bean id="mylutece-notification.folderDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderDAO" />
+	<bean id="mylutece-notification.notificationListPortletDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.portlet.NotificationListPortletDAO" />
 
 	<!-- Services -->
 	<bean id="mylutece-notification.notificationService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationService" />
