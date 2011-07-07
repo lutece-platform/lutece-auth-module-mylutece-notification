@@ -2,6 +2,12 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
+	<!-- Folders -->
+	<bean id="mylutece-notification.folderInbox" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderInbox" />
+	<bean id="mylutece-notification.folderArchive" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderArchive" />
+	<bean id="mylutece-notification.folderOutbox" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderOutbox" />
+	<bean id="mylutece-notification.folderPersonnal" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderPersonnal" />
+	
 	<!-- DAO -->
 	<bean id="mylutece-notification.notificationDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.NotificationDAO" />
 	<bean id="mylutece-notification.folderDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderDAO" />
