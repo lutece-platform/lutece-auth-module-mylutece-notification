@@ -320,6 +320,19 @@ public class NotificationApp implements XPageApplication
         model.put( MARK_MYLUTECE_USER, user );
         model.put( MARK_ID_FOLDER, nIdFolder );
 
+        String strIdNotification = request.getParameter( PARAMETER_ID_NOTIFICATION );
+
+        if ( StringUtils.isNotBlank( strIdNotification ) && StringUtils.isNumeric( strIdNotification ) )
+        {
+            int nIdNotification = Integer.parseInt( strIdNotification );
+            Notification notification = _notificationService.findByPrimaryKey( nIdNotification );
+
+            if ( notification != null )
+            {
+                model.put( MARK_NOTIFICATION, notification );
+            }
+        }
+
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_NOTIFICATION, request.getLocale(  ),
                 model );
 

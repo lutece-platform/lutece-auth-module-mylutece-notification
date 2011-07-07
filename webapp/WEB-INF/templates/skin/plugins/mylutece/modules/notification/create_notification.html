@@ -1,3 +1,11 @@
+<#if notification??>
+	<#assign sender = notification.userGuidSender>
+	<#assign object = "RE : " + notification.object>
+<#else>
+	<#assign sender = "">
+	<#assign object = "">
+</#if>
+
 <div class="portlet-background-header -lutece-border-radius-top">
 	#i18n{module.mylutece.notification.create_notification.labelCreateNotification}
 </div>
@@ -9,11 +17,11 @@
 		<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_create" value="#i18n{module.mylutece.notification.create_notification.buttonSend}" />
 		<p>
 			<label for="to">#i18n{module.mylutece.notification.create_notification.labelUser} * : </label>
-			<@combo name="user_guid_receiver" items=mylutece_users_list default_value="" />
+			<@combo name="user_guid_receiver" items=mylutece_users_list default_value=sender />
 		</p>
 		<p>
 			<label for="object">#i18n{module.mylutece.notification.create_notification.labelObject} : </label>
-			<input type="text" name="object" value="" size="50" maxlength="100" />
+			<input type="text" name="object" value="${object}" size="50" maxlength="100" />
 		</p>
 		<p>
 			<label for="message">#i18n{module.mylutece.notification.create_notification.labelMessage} :</label>
