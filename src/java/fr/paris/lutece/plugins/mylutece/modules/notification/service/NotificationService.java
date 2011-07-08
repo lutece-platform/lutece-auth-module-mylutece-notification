@@ -223,7 +223,18 @@ public final class NotificationService
     }
 
     /**
-     * Notify a user
+     * Notify an user
+     * @param strUserGuidReceiver the receiver
+     * @param strObject the Object of the message
+     * @param strMessage the message
+     */
+    public void notify( String strUserGuidReceiver, String strObject, String strMessage )
+    {
+    	notify( StringUtils.EMPTY, strUserGuidReceiver, strObject, strMessage );
+    }
+    
+    /**
+     * Notify an user
      * @param strUserGuidSender the sender
      * @param strUserGuidReceiver the receiver
      * @param strObject the Object of the message
