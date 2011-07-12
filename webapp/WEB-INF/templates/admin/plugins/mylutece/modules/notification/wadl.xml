@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://wadl.dev.java.net/2009/02 wadl.xsd"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <resources base="${base_url}">
+        <resource path="notify">
+            <method name="POST" >
+                <request>
+                    <representation mediaType="application/x-www-form-urlencoded">
+                        <param name="notification_object" type="xsd:string" style="query" required="true"/>
+                        <param name="notification_message" type="xsd:string" style="query" required="false"/>
+                        <param name="notification_sender" type="xsd:string" style="query" required="false"/>
+                        <param name="notification_receiver" type="xsd:string" style="query" required="false"/>
+                    </representation>
+                </request>
+            </method>
+        </resource>
+    </resources>
+</application>

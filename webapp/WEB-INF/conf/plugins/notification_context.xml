@@ -19,4 +19,7 @@
 	<bean id="mylutece-notification.folderService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.folder.FolderService" />
 	<bean id="mylutece-notification.notificationListPortletService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.portlet.NotificationListPortletService" />
 	<bean id="mylutece-notification.notificationParameterService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.parameter.NotificationParameterService" />
+	
+	<!-- REST -->
+    <bean id="mylutece-notification.notificationRest" class="fr.paris.lutece.plugins.mylutece.modules.notification.rs.NotificationRest" />
 </beans>

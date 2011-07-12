@@ -110,6 +110,7 @@ public class NotificationApp implements XPageApplication
     private static final String MARK_NOTIFICATION_PAGE_CONTENT = "notification_page_content";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_IS_NOTIFICATIONS_SENDING_ENABLE = "is_notifications_sending_enable";
+    private static final String MARK_CAN_BE_REPLIED = "can_be_replied";
 
     // ACTIONS
     private static final String ACTION_VIEW_NOTIFICATION = "view_notification";
@@ -297,11 +298,20 @@ public class NotificationApp implements XPageApplication
                     _notificationService.update( notification );
                 }
 
+                boolean bCanBeReplied = false;
+                LuteceUser sender = SecurityService.getInstance(  ).getUser( notification.getUserGuidSender(  ) );
+
+                if ( sender != null )
+                {
+                    bCanBeReplied = true;
+                }
+
                 Map<String, Object> model = new HashMap<String, Object>(  );
                 model.put( MARK_NOTIFICATION, notification );
                 model.put( MARK_MYLUTECE_USER, user );
                 model.put( MARK_ID_FOLDER, nIdFolder );
                 model.put( MARK_IS_NOTIFICATIONS_SENDING_ENABLE, _parameterService.isNotificationSendingEnable(  ) );
+                model.put( MARK_CAN_BE_REPLIED, bCanBeReplied );
 
                 HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_NOTIFICATION,
                         request.getLocale(  ), model );
