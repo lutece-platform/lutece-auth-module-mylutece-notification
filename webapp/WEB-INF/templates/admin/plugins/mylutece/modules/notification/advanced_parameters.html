@@ -1,0 +1,28 @@
+<#function getName code reference_list>
+	<#if reference_list?has_content>
+		<#list reference_list as reference_item>
+			<#if reference_item.code = code>
+  				<#return reference_item>
+  			</#if>
+  		</#list>
+	</#if>
+	<#return "">
+</#function>
+
+<div class="highlight-box">
+	<form method="post" action="jsp/admin/plugins/mylutece/modules/notification/DoModifyNotificationParameterDefaultValues.jsp">
+		<#assign enable_notifications_sending = getName( 'enable_notifications_sending', list_param_default_values )>
+		<#if enable_notifications_sending??>
+			<p>
+	   			<label for="enable_notifications_sending">#i18n{module.mylutece.notification.advanced_parameters.labelEnableNotificationSending} : </label>
+	   			<input type="checkbox" name="enable_notifications_sending" value="1" <#if enable_notifications_sending.isChecked(  )>checked="checked"</#if> />
+	   			<br />
+	   			<label>&nbsp;</label>
+	   			#i18n{module.mylutece.notification.advanced_parameters.labelEnableNotificationSendingComment}
+			</p>
+		</#if>
+		<p>
+			<input type="submit" class="button" value="#i18n{module.mylutece.notification.advanced_parameters.buttonModify}" />
+		</p>
+	</form>
+</div>

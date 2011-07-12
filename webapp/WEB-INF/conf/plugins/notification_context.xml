@@ -12,8 +12,11 @@
 	<bean id="mylutece-notification.notificationDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.NotificationDAO" />
 	<bean id="mylutece-notification.folderDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderDAO" />
 	<bean id="mylutece-notification.notificationListPortletDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.portlet.NotificationListPortletDAO" />
+	<bean id="mylutece-notification.notificationParameterDAO" class="fr.paris.lutece.plugins.mylutece.modules.notification.business.parameter.NotificationParameterDAO" />
 
 	<!-- Services -->
 	<bean id="mylutece-notification.notificationService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationService" />
 	<bean id="mylutece-notification.folderService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.folder.FolderService" />
+	<bean id="mylutece-notification.notificationListPortletService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.portlet.NotificationListPortletService" />
+	<bean id="mylutece-notification.notificationParameterService"  class="fr.paris.lutece.plugins.mylutece.modules.notification.service.parameter.NotificationParameterService" />
 </beans>

@@ -7,9 +7,11 @@
 			<input type="hidden" name="page" value="mylutece-notification" />
 			<input type="hidden" name="action" value="do_process" />
 			<input type="hidden" name="id_folder" value="${id_folder}" />
-			<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;action=create_notification&amp;id_folder=${id_folder}">
-				<input type="button" class="-lutece-input -lutece-border-radius-mini" value="#i18n{module.mylutece.notification.manage_notifications.buttonCreate}" />
-			</a>
+			<#if is_notifications_sending_enable>
+				<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;action=create_notification&amp;id_folder=${id_folder}">
+					<input type="button" class="-lutece-input -lutece-border-radius-mini" value="#i18n{module.mylutece.notification.manage_notifications.buttonCreate}" />
+				</a>
+			</#if>
 			<#if id_folder != 2>
 				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_archive" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
 			<#else>

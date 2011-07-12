@@ -35,7 +35,9 @@ package fr.paris.lutece.plugins.mylutece.modules.notification.service.portlet;
 
 import fr.paris.lutece.plugins.mylutece.modules.notification.business.portlet.NotificationListPortlet;
 import fr.paris.lutece.plugins.mylutece.modules.notification.business.portlet.NotificationListPortletHome;
+import fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationPlugin;
 import fr.paris.lutece.portal.business.portlet.PortletHome;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 /**
@@ -43,30 +45,26 @@ import fr.paris.lutece.portal.business.portlet.PortletHome;
  * NotificationPortletService
  *
  */
-public class NotificationListPortletService
+public final class NotificationListPortletService
 {
-    private static NotificationListPortletService _singleton;
+    private static final String BEAN_MYLUTECENOTIFICATION_NOTIFICATIONLISTPORTLETSERVICE = "mylutece-notification.notificationListPortletService";
+
+    /**
+     * Private constructor
+     */
+    private NotificationListPortletService(  )
+    {
+    }
 
     /**
      * Return the ThemeService singleton
      *
      * @return the ThemeService singleton
      */
-    public static NotificationListPortletService getInstance(  )
+    public static NotificationListPortletService getService(  )
     {
-        if ( _singleton == null )
-        {
-            _singleton = new NotificationListPortletService(  );
-        }
-
-        return _singleton;
-    }
-
-    /**
-     * Init
-     */
-    public void init(  )
-    {
+        return (NotificationListPortletService) SpringContextService.getPluginBean( NotificationPlugin.PLUGIN_NAME,
+            BEAN_MYLUTECENOTIFICATION_NOTIFICATIONLISTPORTLETSERVICE );
     }
 
     /**

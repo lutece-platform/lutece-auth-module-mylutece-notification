@@ -43,6 +43,7 @@ import java.sql.Timestamp;
  */
 public class Notification
 {
+    public static final String RESOURCE_TYPE = "MYLUTECE_NOTIFICATION";
     private int _nIdNotification;
     private int _nIdFolder;
     private String _strUserGuidSender;

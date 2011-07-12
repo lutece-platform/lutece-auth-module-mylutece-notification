@@ -42,6 +42,23 @@
 			<portlet-modify-specific-template>/admin/plugins/mylutece/modules/notification/portlet/modify_notification_list_portlet.html</portlet-modify-specific-template>
 			<portlet-create-specific-form-template></portlet-create-specific-form-template>
 			<portlet-modify-specific-form-template></portlet-modify-specific-form-template>
-     </portlet>
+		</portlet>
 	</portlets>
+	
+	<!-- Admin Dashboard components -->
+    <admindashboard-components>
+        <admindashboard-component>
+            <dashboard-component-name>myLuteceNotificationAdminDashboardComponent</dashboard-component-name>
+            <dashboard-component-class>fr.paris.lutece.plugins.mylutece.modules.notification.web.NotificationAdminDashboardComponent</dashboard-component-class>
+        </admindashboard-component>
+    </admindashboard-components>
+    
+    <!-- RBAC Resources -->
+	<rbac-resource-types>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+	</rbac-resource-types>
 </plug-in>

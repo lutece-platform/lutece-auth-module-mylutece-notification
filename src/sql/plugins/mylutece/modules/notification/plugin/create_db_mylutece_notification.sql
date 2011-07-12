@@ -26,3 +26,13 @@ CREATE TABLE mylutece_notification_folder (
 	user_guid VARCHAR(255) DEFAULT '' NOT NULL,
 	PRIMARY KEY (id_folder)
 );
+
+--
+-- Structure for table mylutece_notification_parameter
+--
+DROP TABLE IF EXISTS mylutece_notification_parameter;
+CREATE TABLE mylutece_notification_parameter (
+	parameter_key varchar(100) NOT NULL,
+	parameter_value varchar(100) NOT NULL,
+	PRIMARY KEY (parameter_key)
+);

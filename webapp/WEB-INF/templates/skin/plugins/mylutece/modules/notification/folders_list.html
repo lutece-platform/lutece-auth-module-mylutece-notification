@@ -9,20 +9,22 @@
 			</p>
 			<p>
 				<#list folders_list as folder>
-					<img src="${folder.urlIcon}" alt="${folder.label}" title="${folder.label}" />
-					<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;id_folder=${folder.idFolder}">
-						<#if folder.idFolder = id_folder>
-							<b>${folder.label}</b>
-						<#else>
-							${folder.label}
+					<#if !( folder.idFolder = 3 && !is_notifications_sending_enable )>
+						<img src="${folder.urlIcon}" alt="${folder.label}" title="${folder.label}" />
+						<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;id_folder=${folder.idFolder}">
+							<#if folder.idFolder = id_folder>
+								<b>${folder.label}</b>
+							<#else>
+								${folder.label}
+							</#if>
+							<#assign nb_unread_notifications = folder.getNumberUnreadNotifications( mylutece_user.name )>
+							<#if ( nb_unread_notifications?? && nb_unread_notifications > 0 )>
+								(${nb_unread_notifications})
+							</#if>
+						</a>
+						<#if folder_has_next>
+							<br />
 						</#if>
-						<#assign nb_unread_notifications = folder.getNumberUnreadNotifications( mylutece_user.name )>
-						<#if ( nb_unread_notifications?? && nb_unread_notifications > 0 )>
-							(${nb_unread_notifications})
-						</#if>
-					</a>
-					<#if folder_has_next>
-						<br />
 					</#if>
 				</#list>
 			</p>

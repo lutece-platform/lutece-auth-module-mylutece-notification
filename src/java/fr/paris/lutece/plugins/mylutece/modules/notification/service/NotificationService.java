@@ -230,9 +230,9 @@ public final class NotificationService
      */
     public void notify( String strUserGuidReceiver, String strObject, String strMessage )
     {
-    	notify( StringUtils.EMPTY, strUserGuidReceiver, strObject, strMessage );
+        notify( StringUtils.EMPTY, strUserGuidReceiver, strObject, strMessage );
     }
-    
+
     /**
      * Notify an user
      * @param strUserGuidSender the sender

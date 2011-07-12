@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.Fol
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationPlugin;
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationService;
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.folder.FolderService;
+import fr.paris.lutece.plugins.mylutece.modules.notification.service.parameter.NotificationParameterService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
@@ -108,6 +109,7 @@ public class NotificationApp implements XPageApplication
     private static final String MARK_ID_FOLDER = "id_folder";
     private static final String MARK_NOTIFICATION_PAGE_CONTENT = "notification_page_content";
     private static final String MARK_PAGINATOR = "paginator";
+    private static final String MARK_IS_NOTIFICATIONS_SENDING_ENABLE = "is_notifications_sending_enable";
 
     // ACTIONS
     private static final String ACTION_VIEW_NOTIFICATION = "view_notification";
@@ -128,6 +130,7 @@ public class NotificationApp implements XPageApplication
     private static final String MESSAGE_ILLEGAL_CHARACTERS = "module.mylutece.notification.message.illegalCharacters";
     private NotificationService _notificationService = NotificationService.getService(  );
     private FolderService _folderService = FolderService.getService(  );
+    private NotificationParameterService _parameterService = NotificationParameterService.getService(  );
 
     /**
      * {@inheritDoc}
@@ -225,6 +228,7 @@ public class NotificationApp implements XPageApplication
         model.put( MARK_FOLDERS_LIST, _folderService.findByUserGuid( user.getName(  ), locale ) );
         model.put( MARK_ID_FOLDER, nIdFolder );
         model.put( MARK_MYLUTECE_USER, user );
+        model.put( MARK_IS_NOTIFICATIONS_SENDING_ENABLE, _parameterService.isNotificationSendingEnable(  ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_FOLDERS_LIST, locale, model );
 
@@ -257,6 +261,7 @@ public class NotificationApp implements XPageApplication
         model.put( MARK_MYLUTECE_USER, user );
         model.put( MARK_ID_FOLDER, nIdFolder );
         model.put( MARK_PAGINATOR, paginator );
+        model.put( MARK_IS_NOTIFICATIONS_SENDING_ENABLE, _parameterService.isNotificationSendingEnable(  ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_NOTIFICATIONS, request.getLocale(  ),
                 model );
@@ -296,6 +301,7 @@ public class NotificationApp implements XPageApplication
                 model.put( MARK_NOTIFICATION, notification );
                 model.put( MARK_MYLUTECE_USER, user );
                 model.put( MARK_ID_FOLDER, nIdFolder );
+                model.put( MARK_IS_NOTIFICATIONS_SENDING_ENABLE, _parameterService.isNotificationSendingEnable(  ) );
 
                 HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_NOTIFICATION,
                         request.getLocale(  ), model );
@@ -315,28 +321,36 @@ public class NotificationApp implements XPageApplication
      */
     private String getHtmlCreateNotification( HttpServletRequest request, int nIdFolder, LuteceUser user )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_MYLUTECE_USERS_LIST, _notificationService.getUsers(  ) );
-        model.put( MARK_MYLUTECE_USER, user );
-        model.put( MARK_ID_FOLDER, nIdFolder );
+        String strHtml = StringUtils.EMPTY;
 
-        String strIdNotification = request.getParameter( PARAMETER_ID_NOTIFICATION );
-
-        if ( StringUtils.isNotBlank( strIdNotification ) && StringUtils.isNumeric( strIdNotification ) )
+        if ( _parameterService.isNotificationSendingEnable(  ) )
         {
-            int nIdNotification = Integer.parseInt( strIdNotification );
-            Notification notification = _notificationService.findByPrimaryKey( nIdNotification );
+            // Check if the notifications sending is enable
+            Map<String, Object> model = new HashMap<String, Object>(  );
+            model.put( MARK_MYLUTECE_USERS_LIST, _notificationService.getUsers(  ) );
+            model.put( MARK_MYLUTECE_USER, user );
+            model.put( MARK_ID_FOLDER, nIdFolder );
 
-            if ( notification != null )
+            String strIdNotification = request.getParameter( PARAMETER_ID_NOTIFICATION );
+
+            if ( StringUtils.isNotBlank( strIdNotification ) && StringUtils.isNumeric( strIdNotification ) )
             {
-                model.put( MARK_NOTIFICATION, notification );
+                int nIdNotification = Integer.parseInt( strIdNotification );
+                Notification notification = _notificationService.findByPrimaryKey( nIdNotification );
+
+                if ( notification != null )
+                {
+                    model.put( MARK_NOTIFICATION, notification );
+                }
             }
+
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_NOTIFICATION,
+                    request.getLocale(  ), model );
+
+            strHtml = template.getHtml(  );
         }
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_NOTIFICATION, request.getLocale(  ),
-                model );
-
-        return template.getHtml(  );
+        return strHtml;
     }
 
     /**
@@ -471,47 +485,50 @@ public class NotificationApp implements XPageApplication
     private void doCreateNotification( HttpServletRequest request, LuteceUser user )
         throws SiteMessageException
     {
-        String strUserGuid = request.getParameter( PARAMETER_USER_GUID_RECEIVER );
-
-        if ( StringUtils.isNotBlank( strUserGuid ) )
+        if ( _parameterService.isNotificationSendingEnable(  ) )
         {
-            LuteceUser userReceiver = SecurityService.getInstance(  ).getUser( strUserGuid );
+            String strUserGuid = request.getParameter( PARAMETER_USER_GUID_RECEIVER );
 
-            if ( userReceiver != null )
+            if ( StringUtils.isNotBlank( strUserGuid ) )
             {
-                String strObject = request.getParameter( PARAMETER_OBJECT );
-                String strNotificationObject = StringUtils.EMPTY;
+                LuteceUser userReceiver = SecurityService.getInstance(  ).getUser( strUserGuid );
 
-                if ( StringUtils.isBlank( strObject ) )
+                if ( userReceiver != null )
                 {
-                    strNotificationObject = AppPropertiesService.getProperty( PROPERTY_LABEL_NO_OBJECT );
+                    String strObject = request.getParameter( PARAMETER_OBJECT );
+                    String strNotificationObject = StringUtils.EMPTY;
+
+                    if ( StringUtils.isBlank( strObject ) )
+                    {
+                        strNotificationObject = AppPropertiesService.getProperty( PROPERTY_LABEL_NO_OBJECT );
+                    }
+                    else
+                    {
+                        strNotificationObject = strObject;
+                    }
+
+                    String strMessage = request.getParameter( PARAMETER_MESSAGE );
+                    strMessage = StringUtils.isNotEmpty( strMessage ) ? strMessage : StringUtils.EMPTY;
+
+                    if ( !StringUtil.containsXssCharacters( strNotificationObject ) &&
+                            !StringUtil.containsXssCharacters( strMessage ) )
+                    {
+                        _notificationService.notify( user.getName(  ), strUserGuid, strObject, strMessage );
+                    }
+                    else
+                    {
+                        SiteMessageService.setMessage( request, MESSAGE_ILLEGAL_CHARACTERS, SiteMessage.TYPE_STOP );
+                    }
                 }
                 else
                 {
-                    strNotificationObject = strObject;
-                }
-
-                String strMessage = request.getParameter( PARAMETER_MESSAGE );
-                strMessage = StringUtils.isNotEmpty( strMessage ) ? strMessage : StringUtils.EMPTY;
-
-                if ( !StringUtil.containsXssCharacters( strNotificationObject ) &&
-                        !StringUtil.containsXssCharacters( strMessage ) )
-                {
-                    _notificationService.notify( user.getName(  ), strUserGuid, strObject, strMessage );
-                }
-                else
-                {
-                    SiteMessageService.setMessage( request, MESSAGE_ILLEGAL_CHARACTERS, SiteMessage.TYPE_STOP );
+                    SiteMessageService.setMessage( request, MESSAGE_USER_NOT_FOUND, SiteMessage.TYPE_STOP );
                 }
             }
             else
             {
-                SiteMessageService.setMessage( request, MESSAGE_USER_NOT_FOUND, SiteMessage.TYPE_STOP );
+                SiteMessageService.setMessage( request, MESSAGE_INVALID_USER_GUID, SiteMessage.TYPE_STOP );
             }
-        }
-        else
-        {
-            SiteMessageService.setMessage( request, MESSAGE_INVALID_USER_GUID, SiteMessage.TYPE_STOP );
         }
     }
 

@@ -105,7 +105,7 @@ public class NotificationListPortletJspBean extends PortletJspBean
         if ( StringUtils.isNotBlank( strPortletId ) && StringUtils.isNumeric( strPortletId ) )
         {
             int nPortletId = Integer.parseInt( strPortletId );
-            NotificationListPortlet portlet = NotificationListPortletService.getInstance(  ).getPortlet( nPortletId );
+            NotificationListPortlet portlet = NotificationListPortletService.getService(  ).getPortlet( nPortletId );
 
             if ( portlet != null )
             {
@@ -155,7 +155,7 @@ public class NotificationListPortletJspBean extends PortletJspBean
                 portlet.setShowDateCreation( StringUtils.isNotEmpty( strShowDateCreation ) );
                 portlet.setShowSender( StringUtils.isNotEmpty( strShowSender ) );
                 // Creating portlet
-                NotificationListPortletService.getInstance(  ).create( portlet );
+                NotificationListPortletService.getService(  ).create( portlet );
 
                 //Displays the page with the new Portlet
                 strUrl = getPageUrl( portlet );
@@ -199,7 +199,7 @@ public class NotificationListPortletJspBean extends PortletJspBean
 
                     portlet.setShowDateCreation( StringUtils.isNotEmpty( strShowDateCreation ) );
                     portlet.setShowSender( StringUtils.isNotEmpty( strShowSender ) );
-                    NotificationListPortletService.getInstance(  ).update( portlet );
+                    NotificationListPortletService.getService(  ).update( portlet );
                     strUrl = getPageUrl( portlet );
                 }
                 else
