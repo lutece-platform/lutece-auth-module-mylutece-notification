@@ -192,7 +192,7 @@ public class NotificationListPortlet extends Portlet
                     int nItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_NOTIFICATION_ITEMS_PER_PAGE, 10 );
                     boolean bIsLastPageIndex = true;
 
-                    if ( ( nItemsPerPage * nPageIndex ) <= NotificationService.getService(  )
+                    if ( ( nItemsPerPage * nPageIndex ) < NotificationService.getService(  )
                                                                                   .getNumberNotifications( nIdFolder,
                                 user.getName(  ) ) )
                     {
@@ -217,7 +217,7 @@ public class NotificationListPortlet extends Portlet
                         I18nService.getLocalizedString( PROPERTY_LABEL_SELECT_FOLDER, request.getLocale(  ) ) );
 
                     getFoldersListXml( sbXml, user, request.getLocale(  ) );
-                    getNotificationsListXml( sbXml, request, nIdFolder, nPageIndex );
+                    getNotificationsListXml( sbXml, user, request.getLocale(  ), nIdFolder, nPageIndex );
                 }
                 else
                 {
@@ -266,17 +266,19 @@ public class NotificationListPortlet extends Portlet
     /**
      * Get the list of notifications in XML
      * @param sbXml the XML
-     * @param request {@link HttpServletRequest}
+     * @param user the user
+     * @param locale {@link Locale}
      * @param nIdFolder the id folder
      * @param nPageIndex the page index
      */
-    private void getNotificationsListXml( StringBuffer sbXml, HttpServletRequest request, int nIdFolder, int nPageIndex )
+    private void getNotificationsListXml( StringBuffer sbXml, LuteceUser user, Locale locale, int nIdFolder, int nPageIndex )
     {
         XmlUtil.beginElement( sbXml, TAG_NOTIFICATIONS_LIST );
 
         NotificationFilter nFilter = new NotificationFilter(  );
         nFilter.setIdFolder( nIdFolder );
-        nFilter.setLimitIndex( nPageIndex );
+        nFilter.setUserGuidReceiver( user.getName(  ) );
+        nFilter.setLimitIndex( nPageIndex - 1 );
         nFilter.setLimitRange( AppPropertiesService.getPropertyInt( PROPERTY_NOTIFICATION_ITEMS_PER_PAGE, 10 ) );
 
         for ( Notification notification : NotificationService.getService(  ).findByFilter( nFilter ) )
@@ -288,7 +290,7 @@ public class NotificationListPortlet extends Portlet
             if ( _bShowDateCreation )
             {
                 XmlUtil.addElement( sbXml, TAG_NOTIFICATION_DATE_CREATION,
-                    DateUtil.getDateString( notification.getDateCreation(  ), request.getLocale(  ) ) );
+                    DateUtil.getDateString( notification.getDateCreation(  ), locale ) );
             }
 
             if ( _bShowSender )

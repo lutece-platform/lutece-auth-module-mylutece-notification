@@ -21,7 +21,17 @@
 				<xsl:value-of disable-output-escaping="yes" select="portlet-name" />
 			</div>
         </xsl:if>
-		<div class="portlet-background-content -lutece-border-radius-bottom">
+		<div>
+			<xsl:attribute name="class">
+				<xsl:choose>
+					<xsl:when test="not(string(display-portlet-title)='1')">
+						portlet-background-content -lutece-border-radius-bottom
+					</xsl:when>
+					<xsl:otherwise>
+						portlet-background-content -lutece-border-radius
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
 			<xsl:apply-templates select="mylutece-notification-list-portlet" />
 		</div>
 	</div>

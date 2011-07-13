@@ -234,10 +234,9 @@ public class NotificationDAO implements INotificationDAO
 
         if ( nFilter.containsLimit(  ) )
         {
-            int nLimitSecondRange = nFilter.getLimitIndex(  ) * nFilter.getLimitRange(  );
-            int nLimitFirstRange = nLimitSecondRange - nFilter.getLimitRange(  ) + 1;
+            int nLimit = nFilter.getLimitIndex(  ) * nFilter.getLimitRange(  );
             sbSQL.append( SQL_LIMIT );
-            sbSQL.append( nLimitFirstRange + COMMA + nLimitSecondRange );
+            sbSQL.append( nLimit + COMMA + nFilter.getLimitRange(  ) );
         }
 
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
