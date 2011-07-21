@@ -12,11 +12,13 @@
 					<input type="button" class="-lutece-input -lutece-border-radius-mini" value="#i18n{module.mylutece.notification.manage_notifications.buttonCreate}" />
 				</a>
 			</#if>
-			<#if id_folder != 2>
-				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_archive" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
-			<#else>
+			<#if id_folder == 2>
 				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
 				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_restore" value="#i18n{module.mylutece.notification.manage_notifications.buttonRestore}" />
+			<#elseif id_folder == 3>
+				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
+			<#else>
+				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_archive" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
 			</#if>
 		</p>
 		<p>
@@ -49,7 +51,7 @@
 						<input type="checkbox" name="id_notifications" value="${notification.idNotification}" />
 					</td>
 					<td>
-						${notification.userGuidSender}
+						${notification.sender}
 					</td>
 					<td>
 						<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;action=view_notification&amp;id_notification=${notification.idNotification}&amp;id_folder=${id_folder}">

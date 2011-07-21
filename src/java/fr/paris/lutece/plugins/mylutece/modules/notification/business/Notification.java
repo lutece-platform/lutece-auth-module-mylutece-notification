@@ -46,7 +46,7 @@ public class Notification
     public static final String RESOURCE_TYPE = "MYLUTECE_NOTIFICATION";
     private int _nIdNotification;
     private int _nIdFolder;
-    private String _strUserGuidSender;
+    private String _strSender;
     private String _strUserGuidReceiver;
     private String _strObject;
     private String _strMessage;
@@ -135,21 +135,21 @@ public class Notification
     }
 
     /**
-     * Set the user guid sender
-     * @param strUserGuidSender the user guid sender
+     * Set the sender
+     * @param strSender the sender
      */
-    public void setUserGuidSender( String strUserGuidSender )
+    public void setSender( String strSender )
     {
-        _strUserGuidSender = strUserGuidSender;
+        _strSender = strSender;
     }
 
     /**
-     * Get the user guid sender
-     * @return the user guid sender
+     * Get the sender
+     * @return the sender
      */
-    public String getUserGuidSender(  )
+    public String getSender(  )
     {
-        return _strUserGuidSender;
+        return _strSender;
     }
 
     /**

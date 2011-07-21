@@ -171,7 +171,7 @@ public final class NotificationService
         nFilter.setUserGuidReceiver( strUserGuidReceiver );
         nFilter.setIdFolder( nIdFolder );
 
-        return NotificationHome.findByFilter( nFilter );
+        return findByFilter( nFilter );
     }
 
     /**
@@ -235,12 +235,12 @@ public final class NotificationService
 
     /**
      * Notify an user
-     * @param strUserGuidSender the sender
+     * @param strSender the sender
      * @param strUserGuidReceiver the receiver
      * @param strObject the Object of the message
      * @param strMessage the message
      */
-    public void notify( String strUserGuidSender, String strUserGuidReceiver, String strObject, String strMessage )
+    public void notify( String strSender, String strUserGuidReceiver, String strObject, String strMessage )
     {
         // Do several check before notifying
         if ( StringUtils.isNotBlank( strUserGuidReceiver ) )
@@ -264,24 +264,16 @@ public final class NotificationService
                 }
 
                 // Init the sender
-                String strSender = StringUtils.EMPTY;
+                String strSenderTmp = StringUtils.EMPTY;
 
-                if ( StringUtils.isBlank( strUserGuidSender ) )
+                if ( StringUtils.isBlank( strSender ) )
                 {
                     // If the sender is not filled, the email from webmaster.properties is filled instead
-                    strSender = AppPropertiesService.getProperty( PROPERTY_WEBMASTER_EMAIL );
+                    strSenderTmp = AppPropertiesService.getProperty( PROPERTY_WEBMASTER_EMAIL );
                 }
                 else
                 {
-                    // Check if the sender exists
-                    LuteceUser sender = SecurityService.getInstance(  ).getUser( strUserGuidSender );
-
-                    if ( sender == null )
-                    {
-                        throw new AppException( MESSAGE_USER_NOT_FOUND );
-                    }
-
-                    strSender = strUserGuidSender;
+                    strSenderTmp = strSender;
                 }
 
                 // Init the messages
@@ -295,7 +287,7 @@ public final class NotificationService
                     {
                         // Check if the object and the message do not contain illegal characters
                         Notification notification = new Notification(  );
-                        notification.setUserGuidSender( strSender );
+                        notification.setSender( strSenderTmp );
                         notification.setUserGuidReceiver( strUserGuidReceiver );
                         notification.setObject( strNotificationObject );
                         notification.setMessage( strNotificationMessage );
@@ -340,20 +332,20 @@ public final class NotificationService
     }
 
     /**
-     * Copy the notification to the outbox of the sender
+     * Copy the notification to the outbox of the sender if the sender is a {@link LuteceUser}
      * @param notification the {@link Notification}
      */
     private void copyNotificationToOutbox( Notification notification )
     {
         // Check if the sender exists
-        LuteceUser sender = SecurityService.getInstance(  ).getUser( notification.getUserGuidSender(  ) );
+        LuteceUser sender = SecurityService.getInstance(  ).getUser( notification.getSender(  ) );
 
         if ( sender != null )
         {
             // Invert the sender and the receiver so that the sender can see the message in his/her outbox
-            String strSender = notification.getUserGuidSender(  );
+            String strSender = notification.getSender(  );
             String strReceiver = notification.getUserGuidReceiver(  );
-            notification.setUserGuidSender( strReceiver );
+            notification.setSender( strReceiver );
             notification.setUserGuidReceiver( strSender );
             notification.setIsRead( true );
 

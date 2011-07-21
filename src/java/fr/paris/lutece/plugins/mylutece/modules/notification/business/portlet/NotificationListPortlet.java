@@ -64,7 +64,6 @@ import javax.servlet.http.HttpServletRequest;
 public class NotificationListPortlet extends Portlet
 {
     // CONSTANTS
-    private static final String SPACE = " ";
     private static final int TRUE = 1;
     private static final int FALSE = 0;
 
@@ -193,7 +192,7 @@ public class NotificationListPortlet extends Portlet
                     boolean bIsLastPageIndex = true;
 
                     if ( ( nItemsPerPage * nPageIndex ) < NotificationService.getService(  )
-                                                                                  .getNumberNotifications( nIdFolder,
+                                                                                 .getNumberNotifications( nIdFolder,
                                 user.getName(  ) ) )
                     {
                         bIsLastPageIndex = false;
@@ -271,7 +270,8 @@ public class NotificationListPortlet extends Portlet
      * @param nIdFolder the id folder
      * @param nPageIndex the page index
      */
-    private void getNotificationsListXml( StringBuffer sbXml, LuteceUser user, Locale locale, int nIdFolder, int nPageIndex )
+    private void getNotificationsListXml( StringBuffer sbXml, LuteceUser user, Locale locale, int nIdFolder,
+        int nPageIndex )
     {
         XmlUtil.beginElement( sbXml, TAG_NOTIFICATIONS_LIST );
 
@@ -295,14 +295,7 @@ public class NotificationListPortlet extends Portlet
 
             if ( _bShowSender )
             {
-                LuteceUser sender = SecurityService.getInstance(  ).getUser( notification.getUserGuidSender(  ) );
-
-                if ( sender != null )
-                {
-                    XmlUtil.addElement( sbXml, TAG_NOTIFICATION_SENDER,
-                        sender.getUserInfo( LuteceUser.NAME_GIVEN ) + SPACE +
-                        sender.getUserInfo( LuteceUser.NAME_FAMILY ) );
-                }
+                XmlUtil.addElement( sbXml, TAG_NOTIFICATION_SENDER, notification.getSender(  ) );
             }
 
             XmlUtil.addElement( sbXml, TAG_NOTIFICATION_IS_READ, notification.isRead(  ) ? TRUE : FALSE );

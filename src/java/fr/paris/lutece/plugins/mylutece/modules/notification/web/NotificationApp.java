@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.mylutece.modules.notification.web;
 import fr.paris.lutece.plugins.mylutece.modules.notification.business.Notification;
 import fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderArchive;
 import fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderInbox;
+import fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.FolderOutbox;
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationPlugin;
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationService;
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.folder.FolderService;
@@ -299,7 +300,7 @@ public class NotificationApp implements XPageApplication
                 }
 
                 boolean bCanBeReplied = false;
-                LuteceUser sender = SecurityService.getInstance(  ).getUser( notification.getUserGuidSender(  ) );
+                LuteceUser sender = SecurityService.getInstance(  ).getUser( notification.getSender(  ) );
 
                 if ( sender != null )
                 {
@@ -445,10 +446,12 @@ public class NotificationApp implements XPageApplication
                     int nIdNotification = Integer.parseInt( strIdNotification );
                     Notification notification = _notificationService.findByPrimaryKey( nIdNotification );
 
-                    if ( ( notification != null ) && ( notification.getIdFolder(  ) == FolderArchive.getId(  ) ) &&
+                    if ( ( notification != null ) &&
+                            ( ( notification.getIdFolder(  ) == FolderArchive.getId(  ) ) ||
+                            ( notification.getIdFolder(  ) == FolderOutbox.getId(  ) ) ) &&
                             notification.getUserGuidReceiver(  ).equals( user.getName(  ) ) )
                     {
-                        // Check if the notifications are indeed in the archive box and their ownership
+                        // Check if the notifications are indeed in the archive box or the outbox and their ownership
                         _notificationService.remove( nIdNotification );
                     }
                 }

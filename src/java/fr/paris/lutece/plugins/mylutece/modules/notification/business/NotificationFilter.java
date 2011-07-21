@@ -48,7 +48,7 @@ public class NotificationFilter
     private static final int FALSE = 0;
     private boolean _bIsWideSearch;
     private int _nIdFolder;
-    private String _strUserGuidSender;
+    private String _strSender;
     private String _strUserGuidReceiver;
     private int _nIsRead;
     private int _nLimitRange;
@@ -61,7 +61,7 @@ public class NotificationFilter
     {
         _bIsWideSearch = false;
         _nIdFolder = ALL_INT;
-        _strUserGuidSender = StringUtils.EMPTY;
+        _strSender = StringUtils.EMPTY;
         _strUserGuidReceiver = StringUtils.EMPTY;
         _nIsRead = ALL_INT;
         _nLimitRange = ALL_INT;
@@ -126,30 +126,30 @@ public class NotificationFilter
     }
 
     /**
-     * Returns the UserGuidSender
-     * @return The UserGuidSender
+     * Returns the Sender
+     * @return The Sender
      */
-    public String getUserGuidSender(  )
+    public String getSender(  )
     {
-        return _strUserGuidSender;
+        return _strSender;
     }
 
     /**
-     * Sets the UserGuidSender
-     * @param strUserGuidSender The UserGuidSender
+     * Sets the Sender
+     * @param strSender The Sender
      */
-    public void setUserGuidSender( String strUserGuidSender )
+    public void setSender( String strSender )
     {
-        _strUserGuidSender = strUserGuidSender;
+        _strSender = strSender;
     }
 
     /**
-     * Check if the filter contains the attribute UserGuidSender
+     * Check if the filter contains the attribute Sender
      * @return true if it contains, false otherwise
      */
-    public boolean containsUserGuidSender(  )
+    public boolean containsSender(  )
     {
-        return StringUtils.isNotBlank( _strUserGuidSender );
+        return StringUtils.isNotBlank( _strSender );
     }
 
     /**

@@ -52,11 +52,11 @@ public class NotificationDAO implements INotificationDAO
 
     // SQL QUERIES
     private static final String SQL_QUERY_NEW_PK = " SELECT max( id_notification ) FROM mylutece_notification ";
-    private static final String SQL_QUERY_INSERT = " INSERT INTO mylutece_notification (id_notification, id_folder, is_read, user_guid_sender, user_guid_receiver, object, message, date_creation) VALUES (?,?,?,?,?,?,?,?) ";
-    private static final String SQL_QUERY_SELECT = " SELECT id_notification, id_folder, is_read, user_guid_sender, user_guid_receiver, object, message, date_creation FROM mylutece_notification WHERE id_notification = ? ";
+    private static final String SQL_QUERY_INSERT = " INSERT INTO mylutece_notification (id_notification, id_folder, is_read, sender, user_guid_receiver, object, message, date_creation) VALUES (?,?,?,?,?,?,?,?) ";
+    private static final String SQL_QUERY_SELECT = " SELECT id_notification, id_folder, is_read, sender, user_guid_receiver, object, message, date_creation FROM mylutece_notification WHERE id_notification = ? ";
     private static final String SQL_QUERY_UPDATE = " UPDATE mylutece_notification SET id_folder = ?, is_read = ?, object = ?, message = ? WHERE id_notification = ? ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM mylutece_notification WHERE id_notification = ? ";
-    private static final String SQL_QUERY_SELECT_ALL = " SELECT id_notification, id_folder, is_read, user_guid_sender, user_guid_receiver, object, message, date_creation FROM mylutece_notification ";
+    private static final String SQL_QUERY_SELECT_ALL = " SELECT id_notification, id_folder, is_read, sender, user_guid_receiver, object, message, date_creation FROM mylutece_notification ";
     private static final String SQL_QUERY_COUNT = " SELECT count(id_folder) FROM mylutece_notification ";
 
     // FILTERS
@@ -69,7 +69,7 @@ public class NotificationDAO implements INotificationDAO
     private static final String SQL_DATE_CREATION = " date_creation ";
     private static final String SQL_FILTER_ID_FOLDER = " id_folder = ? ";
     private static final String SQL_FILTER_IS_READ = " is_read = ? ";
-    private static final String SQL_FILTER_USER_GUID_SENDER = " user_guid_sender = ? ";
+    private static final String SQL_FILTER_SENDER = " sender = ? ";
     private static final String SQL_FILTER_USER_GUID_RECEIVER = " user_guid_receiver = ? ";
 
     /**
@@ -109,7 +109,7 @@ public class NotificationDAO implements INotificationDAO
             daoUtil.setInt( nIndex++, notification.getIdNotification(  ) );
             daoUtil.setInt( nIndex++, notification.getIdFolder(  ) );
             daoUtil.setBoolean( nIndex++, notification.isRead(  ) );
-            daoUtil.setString( nIndex++, notification.getUserGuidSender(  ) );
+            daoUtil.setString( nIndex++, notification.getSender(  ) );
             daoUtil.setString( nIndex++, notification.getUserGuidReceiver(  ) );
             daoUtil.setString( nIndex++, notification.getObject(  ) );
             daoUtil.setString( nIndex++, notification.getMessage(  ) );
@@ -142,7 +142,7 @@ public class NotificationDAO implements INotificationDAO
             notification.setIdNotification( daoUtil.getInt( nIndex++ ) );
             notification.setIdFolder( daoUtil.getInt( nIndex++ ) );
             notification.setIsRead( daoUtil.getBoolean( nIndex++ ) );
-            notification.setUserGuidSender( daoUtil.getString( nIndex++ ) );
+            notification.setSender( daoUtil.getString( nIndex++ ) );
             notification.setUserGuidReceiver( daoUtil.getString( nIndex++ ) );
             notification.setObject( daoUtil.getString( nIndex++ ) );
             notification.setMessage( daoUtil.getString( nIndex++ ) );
@@ -208,7 +208,7 @@ public class NotificationDAO implements INotificationDAO
             notification.setIdNotification( daoUtil.getInt( nIndex++ ) );
             notification.setIdFolder( daoUtil.getInt( nIndex++ ) );
             notification.setIsRead( daoUtil.getBoolean( nIndex++ ) );
-            notification.setUserGuidSender( daoUtil.getString( nIndex++ ) );
+            notification.setSender( daoUtil.getString( nIndex++ ) );
             notification.setUserGuidReceiver( daoUtil.getString( nIndex++ ) );
             notification.setObject( daoUtil.getString( nIndex++ ) );
             notification.setMessage( daoUtil.getString( nIndex++ ) );
@@ -250,7 +250,7 @@ public class NotificationDAO implements INotificationDAO
             notification.setIdNotification( daoUtil.getInt( nIndex++ ) );
             notification.setIdFolder( daoUtil.getInt( nIndex++ ) );
             notification.setIsRead( daoUtil.getBoolean( nIndex++ ) );
-            notification.setUserGuidSender( daoUtil.getString( nIndex++ ) );
+            notification.setSender( daoUtil.getString( nIndex++ ) );
             notification.setUserGuidReceiver( daoUtil.getString( nIndex++ ) );
             notification.setObject( daoUtil.getString( nIndex++ ) );
             notification.setMessage( daoUtil.getString( nIndex++ ) );
@@ -308,10 +308,10 @@ public class NotificationDAO implements INotificationDAO
             sbSQL.append( SQL_FILTER_IS_READ );
         }
 
-        if ( nFilter.containsUserGuidSender(  ) )
+        if ( nFilter.containsSender(  ) )
         {
             nIndex = addSQLWhereOr( nFilter.getIsWideSearch(  ), sbSQL, nIndex );
-            sbSQL.append( SQL_FILTER_USER_GUID_SENDER );
+            sbSQL.append( SQL_FILTER_SENDER );
         }
 
         if ( nFilter.containsUserGuidReceiver(  ) )
@@ -368,9 +368,9 @@ public class NotificationDAO implements INotificationDAO
             daoUtil.setBoolean( nIndex++, nFilter.isRead(  ) );
         }
 
-        if ( nFilter.containsUserGuidSender(  ) )
+        if ( nFilter.containsSender(  ) )
         {
-            daoUtil.setString( nIndex++, nFilter.getUserGuidSender(  ) );
+            daoUtil.setString( nIndex++, nFilter.getSender(  ) );
         }
 
         if ( nFilter.containsUserGuidReceiver(  ) )
