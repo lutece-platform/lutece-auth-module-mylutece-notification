@@ -61,7 +61,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * DatabaseBlobStoreRest
+ * NotificationRest
  *
  */
 @Path( RestConstants.BASE_PATH + NotificationPlugin.PLUGIN_NAME )
