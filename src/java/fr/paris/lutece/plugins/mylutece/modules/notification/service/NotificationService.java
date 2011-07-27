@@ -43,7 +43,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.string.StringUtil;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -72,7 +71,8 @@ public final class NotificationService
     private static final String MESSAGE_INVALID_USER_GUID = "MyLutece Notification - Invalid Notification.";
     private static final String MESSAGE_USER_NOT_FOUND = "MyLutece Notification - User not found.";
     private static final String MESSAGE_OBJECT_SIZE_TOO_BIG = "MyLutece Notification - Object size too big (max : 100 characters).";
-    private static final String MESSAGE_ILLEGAL_CHARACTERS = "MyLutece Notification - Object/Message contain illegal characters.";
+
+    // private static final String MESSAGE_ILLEGAL_CHARACTERS = "MyLutece Notification - Object/Message contain illegal characters.";
 
     /**
      * Private constructor
@@ -279,27 +279,39 @@ public final class NotificationService
                 // Init the messages
                 String strNotificationMessage = StringUtils.isNotEmpty( strMessage ) ? strMessage : StringUtils.EMPTY;
 
+                // Check if the object is not too big
                 if ( strNotificationObject.length(  ) <= NOTIFICATION_OBJECT_MAX_SIZE )
                 {
-                    // Check if the object is not too big
+                    // Check if the object and the message do not contain illegal characters
+                    // TODO : The notifications should not accept illegal characters for security issues
+                    /*
                     if ( !StringUtil.containsXssCharacters( strObject ) &&
-                            !StringUtil.containsXssCharacters( strNotificationMessage ) )
+                        !StringUtil.containsXssCharacters( strNotificationMessage ) )
                     {
-                        // Check if the object and the message do not contain illegal characters
-                        Notification notification = new Notification(  );
-                        notification.setSender( strSenderTmp );
-                        notification.setUserGuidReceiver( strUserGuidReceiver );
-                        notification.setObject( strNotificationObject );
-                        notification.setMessage( strNotificationMessage );
-                        create( notification );
-
-                        // Copy the notification to the outbox
-                        copyNotificationToOutbox( notification );
+                    Notification notification = new Notification(  );
+                    notification.setSender( strSenderTmp );
+                    notification.setUserGuidReceiver( strUserGuidReceiver );
+                    notification.setObject( strNotificationObject );
+                    notification.setMessage( strNotificationMessage );
+                    create( notification );
+                    
+                    // Copy the notification to the outbox
+                    copyNotificationToOutbox( notification );
                     }
                     else
                     {
-                        throw new AppException( MESSAGE_ILLEGAL_CHARACTERS );
+                    throw new AppException( MESSAGE_ILLEGAL_CHARACTERS );
                     }
+                    */
+                    Notification notification = new Notification(  );
+                    notification.setSender( strSenderTmp );
+                    notification.setUserGuidReceiver( strUserGuidReceiver );
+                    notification.setObject( strNotificationObject );
+                    notification.setMessage( strNotificationMessage );
+                    create( notification );
+
+                    // Copy the notification to the outbox
+                    copyNotificationToOutbox( notification );
                 }
                 else
                 {
