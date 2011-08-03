@@ -8,6 +8,7 @@
 <xsl:variable name="page-index" select="portlet/mylutece-notification-list-portlet/page-index" />
 <xsl:variable name="nb-items-per-page" select="portlet/mylutece-notification-list-portlet/nb-items-per-page" />
 <xsl:variable name="is-last-page-index" select="portlet/mylutece-notification-list-portlet/is-last-page-index" />
+<xsl:variable name="is-notifications-sending-enable" select="portlet/mylutece-notification-list-portlet/is-notifications-sending-enable" />
 <xsl:variable name="label-from" select="portlet/mylutece-notification-list-portlet/label-from" />
 <xsl:variable name="label-to" select="portlet/mylutece-notification-list-portlet/label-to" />
 <xsl:variable name="label-object" select="portlet/mylutece-notification-list-portlet/label-object" />
@@ -68,14 +69,16 @@
 </xsl:template>
 
 <xsl:template match="folder">
-	<option value="{id-folder}">
-		<xsl:if test="id-folder = $id-current-folder">
-			<xsl:attribute name="selected">
-				selected
-			</xsl:attribute>
-		</xsl:if>
-		<xsl:value-of select="folder-label" />
-	</option>
+	<xsl:if test="not( ( id-folder = 3 ) and ( $is-notifications-sending-enable = 0 ) )">
+		<option value="{id-folder}">
+			<xsl:if test="id-folder = $id-current-folder">
+				<xsl:attribute name="selected">
+					selected
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select="folder-label" />
+		</option>
+	</xsl:if>
 </xsl:template>
 
 <xsl:template match="notifications-list">
@@ -137,7 +140,7 @@
 </xsl:template>
 
 <xsl:template name="paginator">
-	<xsl:if test="( $page-index != 1 ) or ($is-last-page-index != 1 )">
+	<xsl:if test="( $page-index != 1 ) or ( $is-last-page-index != 1 )">
 		<p>
 			<xsl:if test="$page-index != 1">
 				<xsl:variable name="page-index-prev">

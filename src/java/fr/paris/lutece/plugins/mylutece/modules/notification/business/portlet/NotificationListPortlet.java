@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.mylutece.modules.notification.business.Notificati
 import fr.paris.lutece.plugins.mylutece.modules.notification.business.folder.IFolder;
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationService;
 import fr.paris.lutece.plugins.mylutece.modules.notification.service.folder.FolderService;
+import fr.paris.lutece.plugins.mylutece.modules.notification.service.parameter.NotificationParameterService;
 import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
@@ -88,7 +89,7 @@ public class NotificationListPortlet extends Portlet
     private static final String TAG_FOLDER = "folder";
     private static final String TAG_ID_FOLDER = "id-folder";
     private static final String TAG_PAGE_INDEX = "page-index";
-    private static final String TAG_IS_LAS_PAGE_INDEX = "is-last-page-index";
+    private static final String TAG_IS_LAST_PAGE_INDEX = "is-last-page-index";
     private static final String TAG_NB_ITEMS_PER_PAGE = "nb-items-per-page";
     private static final String TAG_FOLDER_LABEL = "folder-label";
     private static final String TAG_NOTIFICATIONS_LIST = "notifications-list";
@@ -103,6 +104,7 @@ public class NotificationListPortlet extends Portlet
     private static final String TAG_LABEL_OBJECT = "label-object";
     private static final String TAG_LABEL_DATE_RECEIVED = "label-date-received";
     private static final String TAG_LABEL_SELECT_FOLDER = "label-select-folder";
+    private static final String TAG_IS_NOTIFICATIONS_SENDING_ENABLE = "is-notifications-sending-enable";
 
     // VARIABLES
     private boolean _bShowDateCreation;
@@ -198,12 +200,16 @@ public class NotificationListPortlet extends Portlet
                         bIsLastPageIndex = false;
                     }
 
+                    boolean bIsNotificationsSendingEnable = NotificationParameterService.getService(  )
+                                                                                        .isNotificationSendingEnable(  );
+
                     XmlUtil.addElement( sbXml, TAG_ERROR_MESSAGE, StringUtils.EMPTY );
                     XmlUtil.addElement( sbXml, TAG_ID_FOLDER, nIdFolder );
                     XmlUtil.addElement( sbXml, TAG_PAGE_INDEX, nPageIndex );
                     XmlUtil.addElement( sbXml, TAG_NB_ITEMS_PER_PAGE, nItemsPerPage );
-                    XmlUtil.addElement( sbXml, TAG_IS_LAS_PAGE_INDEX, bIsLastPageIndex ? TRUE : FALSE );
-                    XmlUtil.addElement( sbXml, TAG_ID_FOLDER, nIdFolder );
+                    XmlUtil.addElement( sbXml, TAG_IS_LAST_PAGE_INDEX, bIsLastPageIndex ? TRUE : FALSE );
+                    XmlUtil.addElement( sbXml, TAG_IS_NOTIFICATIONS_SENDING_ENABLE,
+                        bIsNotificationsSendingEnable ? TRUE : FALSE );
                     XmlUtil.addElement( sbXml, TAG_LABEL_FROM,
                         I18nService.getLocalizedString( PROPERTY_LABEL_FROM, request.getLocale(  ) ) );
                     XmlUtil.addElement( sbXml, TAG_LABEL_TO,
