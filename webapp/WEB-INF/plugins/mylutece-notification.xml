@@ -40,8 +40,8 @@
 			<portlet-modify-script-template>/admin/portlet/script_modify_portlet.html</portlet-modify-script-template>
 			<portlet-create-specific-template>/admin/plugins/mylutece/modules/notification/portlet/create_notification_list_portlet.html</portlet-create-specific-template>
 			<portlet-modify-specific-template>/admin/plugins/mylutece/modules/notification/portlet/modify_notification_list_portlet.html</portlet-modify-specific-template>
-			<portlet-create-specific-form-template></portlet-create-specific-form-template>
-			<portlet-modify-specific-form-template></portlet-modify-specific-form-template>
+			<portlet-create-specific-form-template/>
+			<portlet-modify-specific-form-template/>
 		</portlet>
 	</portlets>
 	
