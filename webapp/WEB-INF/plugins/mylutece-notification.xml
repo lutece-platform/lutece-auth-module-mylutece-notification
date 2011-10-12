@@ -71,7 +71,7 @@
 
            <init-param>
                <param-name>elementsSignature</param-name>
-               <param-value>notification_object,notification_sender,notification_receiver</param-value>
+               <param-value></param-value>
            </init-param>
 
            <init-param>
