@@ -71,7 +71,7 @@
 
            <init-param>
                <param-name>elementsSignature</param-name>
-               <param-value></param-value>
+               <param-value/>
            </init-param>
 
            <init-param>
