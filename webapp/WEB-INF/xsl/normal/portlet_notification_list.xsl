@@ -18,21 +18,11 @@
 <xsl:template match="portlet">
 	<div class="portlet-background append-bottom">
         <xsl:if test="not(string(display-portlet-title)='1')">
-			<div class="portlet-background-header -lutece-border-radius-top">
+			<legend>
 				<xsl:value-of disable-output-escaping="yes" select="portlet-name" />
-			</div>
+			</legend>
         </xsl:if>
 		<div>
-			<xsl:attribute name="class">
-				<xsl:choose>
-					<xsl:when test="not(string(display-portlet-title)='1')">
-						portlet-background-content -lutece-border-radius-bottom
-					</xsl:when>
-					<xsl:otherwise>
-						portlet-background-content -lutece-border-radius
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
 			<xsl:apply-templates select="mylutece-notification-list-portlet" />
 		</div>
 	</div>
@@ -51,21 +41,17 @@
 </xsl:template>
 
 <xsl:template match="folders-list">
-	<form action="">
-		<input type="hidden" name="page_id" value="{$page-id}" />
-		<table>
-			<tr>
-				<td>
-					<select name="id_folder">
-						<xsl:apply-templates select="folder" />
-					</select>
-				</td>
-				<td>
-					<input type="image" src="images/local/skin/plugins/mylutece/modules/notification/go.png" title="{$label-select-folder}" />
-				</td>
-			</tr>
-		</table>
-	</form>
+	<div class="input-append">
+		<form action="">
+			<input type="hidden" name="page_id" value="{$page-id}" />
+			<select name="id_folder">
+				<xsl:apply-templates select="folder" />
+			</select>
+			<button type="submit" class="btn btn-primary" title="{$label-select-folder}" value="{$label-select-folder}">
+				<span class="icon-arrow-right icon-white"> </span>
+			</button>
+		</form>
+	</div>
 </xsl:template>
 
 <xsl:template match="folder">
@@ -83,7 +69,7 @@
 
 <xsl:template match="notifications-list">
 	<xsl:if test="*">
-		<table>
+		<table class="table table-striped">
 			<tr>
 				<xsl:if test="*[1]/sender != ''">
 					<th>

@@ -1,77 +1,99 @@
-<div class="portlet-background-header -lutece-border-radius-top">
-	#i18n{module.mylutece.notification.manage_notifications.labelManageNotifications}
-</div>
-<div class="portlet-background-content -lutece-border-radius-bottom">
+<div>
 	<form method="post" action="jsp/site/Portal.jsp">
-		<p>
-			<input type="hidden" name="page" value="mylutece-notification" />
-			<input type="hidden" name="action" value="do_process" />
-			<input type="hidden" name="id_folder" value="${id_folder}" />
-			<#if is_notifications_sending_enable>
-				<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;action=create_notification&amp;id_folder=${id_folder}">
-					<input type="button" class="-lutece-input -lutece-border-radius-mini" value="#i18n{module.mylutece.notification.manage_notifications.buttonCreate}" />
-				</a>
-			</#if>
-			<#if id_folder == 2>
-				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
-				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_restore" value="#i18n{module.mylutece.notification.manage_notifications.buttonRestore}" />
-			<#elseif id_folder == 3>
-				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
-			<#else>
-				<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_archive" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" />
-			</#if>
-		</p>
-		<p>
-			#i18n{module.mylutece.notification.manage_notifications.labelItemsCount} : <strong>${paginator.itemsCount}</strong> <br />
-			#i18n{module.mylutece.notification.manage_notifications.labelItemsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
-			<@pagination paginator=paginator />
-		</p>
-		<table>
-			<tr>
-				<th>
-					&nbsp;
-				</th>
-				<th>
-					<#if id_folder = 3>
-						#i18n{module.mylutece.notification.manage_notifications.labelTo}
-					<#else>
-						#i18n{module.mylutece.notification.manage_notifications.labelFrom}
+		<fieldset>
+			<legend>
+				#i18n{module.mylutece.notification.manage_notifications.labelManageNotifications}
+				<div class="pull-right">
+					<input type="hidden" name="page" value="mylutece-notification" />
+					<input type="hidden" name="action" value="do_process" />
+					<input type="hidden" name="id_folder" value="${id_folder}" />
+					<#if is_notifications_sending_enable>
+						<a class="btn btn-primary btn-small" href="jsp/site/Portal.jsp?page=mylutece-notification&amp;action=create_notification&amp;id_folder=${id_folder}">
+							<i class="icon-plus icon-white">&nbsp;</i><span class="hidden-phone">&nbsp;#i18n{module.mylutece.notification.manage_notifications.buttonCreate}</span>
+						</a>
 					</#if>
-				</th>
-				<th>
-					#i18n{module.mylutece.notification.manage_notifications.labelObject}
-				</th>
-				<th>
-					#i18n{module.mylutece.notification.manage_notifications.labelDateReceived}
-				</th>
-			</tr>
-			<#list notifications_list as notification>
+					<#if id_folder == 2>
+						<button type="submit" class="btn btn-danger btn-small" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" >
+							<i class="icon-trash icon-white">&nbsp;</i><span class="hidden-phone">&nbsp;#i18n{module.mylutece.notification.manage_notifications.buttonDelete}</span>
+						</button>
+						<button type="submit" class="btn btn-primary btn-small" name="do_restore" value="#i18n{module.mylutece.notification.manage_notifications.buttonRestore}" >
+							<i class="icon-repeat icon-white">&nbsp;</i><span class="hidden-phone">&nbsp;#i18n{module.mylutece.notification.manage_notifications.buttonRestore}</span>
+						</button>
+					<#elseif id_folder == 3>
+						<button type="submit" class="btn btn-danger btn-small" name="delete" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" >
+							<i class="icon-trash icon-white">&nbsp;</i><span class="hidden-phone">&nbsp;#i18n{module.mylutece.notification.manage_notifications.buttonDelete}</span>
+						</button>
+					<#else>
+						<button type="submit" class="btn btn-danger btn-small" name="do_archive" value="#i18n{module.mylutece.notification.manage_notifications.buttonDelete}" >
+							<i class="icon-trash icon-white">&nbsp;</i><span class="hidden-phone">&nbsp;#i18n{module.mylutece.notification.manage_notifications.buttonDelete}</span>
+						</button>
+					</#if>
+				</div>
+			</legend>
+			<div>
+				#i18n{module.mylutece.notification.manage_notifications.labelItemsCount} : <strong>${paginator.itemsCount}</strong> <br />
+				#i18n{module.mylutece.notification.manage_notifications.labelItemsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
+				<@pagination paginator=paginator />
+			</div>
+			<table class="table table-striped">
 				<tr>
-					<td>
-						<input type="checkbox" name="id_notifications" value="${notification.idNotification}" />
-					</td>
-					<td>
-						${notification.sender}
-					</td>
-					<td>
-						<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;action=view_notification&amp;id_notification=${notification.idNotification}&amp;id_folder=${id_folder}">
+					<th>
+						&nbsp;
+					</th>
+					<th>
+						<#if id_folder = 3>
+							#i18n{module.mylutece.notification.manage_notifications.labelTo}
+						<#else>
+							#i18n{module.mylutece.notification.manage_notifications.labelFrom}
+						</#if>
+					</th>
+					<th>
+						#i18n{module.mylutece.notification.manage_notifications.labelObject}
+					</th>
+					<th>
+						#i18n{module.mylutece.notification.manage_notifications.labelDateReceived}
+					</th>
+				</tr>
+				<#list notifications_list as notification>
+					<tr>
+						<td>
+							<input type="checkbox" name="id_notifications" value="${notification.idNotification}" />
+						</td>
+						<td>
 							<#if notification.isRead(  )>
-								${notification.object}
+								${notification.sender}
 							<#else>
 								<b>
-									${notification.object}
+									${notification.sender}
 								</b>
 							</#if>
-						</a>
-					</td>
-					<td>
-						${notification.dateCreation?date}
-					</td>
-				</tr>
-			</#list>
-		</table>
-		<p>
-			<@pagination paginator=paginator />
-		</p>
+						</td>
+						<td>
+							<a href="jsp/site/Portal.jsp?page=mylutece-notification&amp;action=view_notification&amp;id_notification=${notification.idNotification}&amp;id_folder=${id_folder}">
+								<#if notification.isRead(  )>
+									${notification.object}
+								<#else>
+									<b>
+										${notification.object}
+									</b>
+								</#if>
+							</a>
+						</td>
+						<td>
+							<#if notification.isRead(  )>
+								${notification.dateCreation?date}
+							<#else>
+								<b>
+									${notification.dateCreation?date}
+								</b>
+							</#if>
+						</td>
+					</tr>
+				</#list>
+			</table>
+			<div>
+				<@pagination paginator=paginator />
+			</div>
+		</fieldset>
 	</form>
 </div>

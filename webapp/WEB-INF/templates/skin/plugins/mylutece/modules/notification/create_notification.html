@@ -5,27 +5,41 @@
 	<#assign sender = "">
 	<#assign object = "">
 </#if>
-
-<div class="portlet-background-header -lutece-border-radius-top">
-	#i18n{module.mylutece.notification.create_notification.labelCreateNotification}
-</div>
-<div class="portlet-background-content -lutece-border-radius-bottom">
-	<form method="post" action="jsp/site/Portal.jsp">
-		<input type="hidden" name="page" value="mylutece-notification" />
-		<input type="hidden" name="action" value="do_process" />
-		<input type="hidden" name="id_folder" value="${id_folder}" />
-		<input type="submit" class="-lutece-input -lutece-border-radius-mini" name="do_create" value="#i18n{module.mylutece.notification.create_notification.buttonSend}" />
-		<p>
-			<label for="to">#i18n{module.mylutece.notification.create_notification.labelUser} * : </label>
-			<@combo name="user_guid_receiver" items=mylutece_users_list default_value=sender />
-		</p>
-		<p>
-			<label for="object">#i18n{module.mylutece.notification.create_notification.labelObject} : </label>
-			<input type="text" name="object" value="${object}" size="50" maxlength="100" />
-		</p>
-		<p>
-			<label for="message">#i18n{module.mylutece.notification.create_notification.labelMessage} :</label>
-			<textarea rows="6" cols="73" name="message"></textarea>
-		</p>
+<div>
+	<form class="form-horizontal" method="post" action="jsp/site/Portal.jsp">
+		<fieldset>
+			<legend>
+				#i18n{module.mylutece.notification.create_notification.labelCreateNotification}
+			</legend>
+			<input type="hidden" name="page" value="mylutece-notification" />
+			<input type="hidden" name="action" value="do_process" />
+			<input type="hidden" name="id_folder" value="${id_folder}" />
+			<div class="control-group">
+				<label class="control-label" for="to">#i18n{module.mylutece.notification.create_notification.labelUser} * : </label>
+				<div class="controls">
+					<@combo name="user_guid_receiver" items=mylutece_users_list default_value=sender />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label"  for="object">#i18n{module.mylutece.notification.create_notification.labelObject} : </label>
+				<div class="controls">
+					<input type="text" name="object" value="${object}" size="50" maxlength="100" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="message">#i18n{module.mylutece.notification.create_notification.labelMessage} :</label>
+				<div class="controls">
+					<textarea rows="6" cols="73" name="message"></textarea>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-small btn-primary" name="do_create" value="#i18n{module.mylutece.notification.create_notification.buttonSend}" title="#i18n{module.mylutece.notification.create_notification.buttonSend}" >
+					<i class="icon-envelope icon-white">&nbsp;</i><span class="hidden-phone">&nbsp;#i18n{module.mylutece.notification.create_notification.buttonSend}</span>
+				</button>
+				<button type="button" class="btn btn-small" name="do_create" title="#i18n{portal.util.labelBack}" onclick="javascript:history.go(-1);" >
+					<i class="icon-remove-circle">&nbsp;</i><span class="hidden-phone">&nbsp;#i18n{portal.util.labelBack}</span>
+				</button>
+			</div>
+		</fieldset>
 	</form>
 </div>

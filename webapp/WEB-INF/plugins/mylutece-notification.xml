@@ -2,7 +2,7 @@
     <!-- Plugin Informations -->
     <name>mylutece-notification</name>
     <class>fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationPlugin</class>
-    <version>1.0.2</version>
+    <version>2.0.0</version>
     <documentation/>
     <installation/>
     <changes/>
@@ -13,7 +13,7 @@
     <icon-url>images/admin/skin/plugins/mylutece/modules/notification/mylutece-notification.png</icon-url>
     <copyright>Copyright 2001-2011 Mairie de Paris</copyright>
     <core-version-dependency>
-        <min-core-version>2.4.0</min-core-version>
+        <min-core-version>4.0.0</min-core-version>
         <max-core-version/>
     </core-version-dependency>
     <db-pool-required>1</db-pool-required>
