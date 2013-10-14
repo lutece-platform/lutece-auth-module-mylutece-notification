@@ -50,11 +50,11 @@ import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.xml.XmlUtil;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -309,5 +309,14 @@ public class NotificationListPortlet extends Portlet
         }
 
         XmlUtil.endElement( sbXml, TAG_NOTIFICATIONS_LIST );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void remove( )
+    {
+        NotificationListPortletHome.getInstance( ).getDAO( ).delete( getId( ) );
     }
 }
