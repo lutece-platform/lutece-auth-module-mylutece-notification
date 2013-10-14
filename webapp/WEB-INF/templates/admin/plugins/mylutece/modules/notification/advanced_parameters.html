@@ -9,20 +9,22 @@
 	<#return "">
 </#function>
 
-<div class="highlight-box">
-	<form method="post" action="jsp/admin/plugins/mylutece/modules/notification/DoModifyNotificationParameterDefaultValues.jsp">
-		<#assign enable_notifications_sending = getName( 'enable_notifications_sending', list_param_default_values )>
-		<#if enable_notifications_sending??>
-			<p>
-	   			<label for="enable_notifications_sending">#i18n{module.mylutece.notification.advanced_parameters.labelEnableNotificationSending} : </label>
-	   			<input type="checkbox" name="enable_notifications_sending" value="1" <#if enable_notifications_sending.isChecked(  )>checked="checked"</#if> />
-	   			<br />
-	   			<label>&nbsp;</label>
-	   			#i18n{module.mylutece.notification.advanced_parameters.labelEnableNotificationSendingComment}
-			</p>
-		</#if>
-		<p>
-			<input type="submit" class="button" value="#i18n{module.mylutece.notification.advanced_parameters.buttonModify}" />
-		</p>
-	</form>
-</div>
+<form method="post" action="jsp/admin/plugins/mylutece/modules/notification/DoModifyNotificationParameterDefaultValues.jsp">
+	<#assign enable_notifications_sending = getName( 'enable_notifications_sending', list_param_default_values )>
+	<#if enable_notifications_sending??>
+		<div>
+   			<label class="checkbox" for="enable_notifications_sending">
+   				<input type="checkbox" name="enable_notifications_sending" value="1" <#if enable_notifications_sending.isChecked(  )>checked="checked"</#if> />
+   				#i18n{module.mylutece.notification.advanced_parameters.labelEnableNotificationSending}
+   			</label>
+   			<span class="helpblock">
+   				#i18n{module.mylutece.notification.advanced_parameters.labelEnableNotificationSendingComment}
+   			</span>
+		</div>
+	</#if>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary btn-small" value="#i18n{module.mylutece.notification.advanced_parameters.buttonModify}" >
+			<i class="icon-ok icon-white">&nbsp;</i>&nbsp;#i18n{module.mylutece.notification.advanced_parameters.buttonModify}
+		</button>
+	</div>
+</form>
