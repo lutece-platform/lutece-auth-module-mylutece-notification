@@ -2,7 +2,7 @@
     <!-- Plugin Informations -->
     <name>mylutece-notification</name>
     <class>fr.paris.lutece.plugins.mylutece.modules.notification.service.NotificationPlugin</class>
-    <version>2.1.0</version>
+    <version>2.1.1-SNAPSHOT</version>
     <documentation/>
     <installation/>
     <changes/>
